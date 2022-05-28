@@ -25,6 +25,7 @@ var https = require('https');
 const app = express();
 const qs = require('qs');
 const axios = require('axios').default;
+const cors = require('cors');
 
 const cors_server = cors_proxy.createServer({
   // originBlacklist: originBlacklist,
@@ -56,6 +57,7 @@ const cors_server = cors_proxy.createServer({
 //   console.log('Running CORS Anywhere on ' + host + ':' + port);
 // });
 
+app.use(cors());
 app.get('/proxy/:proxyUrl*', (req, res) => {
   req.url = req.url.replace('/proxy/', '/'); // Strip '/proxy' from the front of the URL, else the proxy won't work.
   try {
