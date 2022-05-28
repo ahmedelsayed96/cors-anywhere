@@ -65,6 +65,15 @@ app.get('/proxy/:proxyUrl*', (req, res) => {
 
  }
 });
+app.post('/proxy/:proxyUrl*', (req, res) => {
+  req.url = req.url.replace('/proxy/', '/'); // Strip '/proxy' from the front of the URL, else the proxy won't work.
+  try {
+    cors_server.emit('request', req, res);
+  }catch (err){
+    res.send( err);
+
+ }
+});
 // app.post('/proxy/:proxyUrl*', (req, res) => {
 //   req.url = req.url.replace('/proxy/', '/'); // Strip '/proxy' from the front of the URL, else the proxy won't work.
 //   cors_server.emit('request', req, res);
