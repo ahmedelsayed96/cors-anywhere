@@ -57,9 +57,9 @@ const cors_server = cors_proxy.createServer({
 //   console.log('Running CORS Anywhere on ' + host + ':' + port);
 // });
 
-// app.use(cors({
-//   origin: '*'
-// }));
+app.use(cors({
+  origin: '*'
+}));
 
 
 app.get('/proxy/:proxyUrl*', (req, res) => {
