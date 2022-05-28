@@ -58,8 +58,27 @@ const cors_server = cors_proxy.createServer({
 // });
 
 app.use(cors({
-  origin:'*'
+  origin: '*'
 }));
+const generalException = (err, req, res, next) => {
+  if (!err) {
+      next();
+      return;
+  }
+  // const errors = [{
+  //     type: err.name,
+  //     code: errorsCode.errors.generic.code,
+  //     message: err.message || errorsCode.errors.generic.message,
+  //     trace_id: req.id,
+  // }];
+  res.status(err.status || 400).json({
+      success: false,
+      status: err.status || 400,
+      error: err
+  });
+};
+app.use(generalException);
+
 app.get('/proxy/:proxyUrl*', (req, res) => {
   req.url = req.url.replace('/proxy/', '/'); // Strip '/proxy' from the front of the URL, else the proxy won't work.
   try {
@@ -82,6 +101,8 @@ app.post('/proxy/:proxyUrl*', (req, res) => {
 //   req.url = req.url.replace('/proxy/', '/'); // Strip '/proxy' from the front of the URL, else the proxy won't work.
 //   cors_server.emit('request', req, res);
 // });
+
+
 app.post('/token', async (req, res) => {
   const tenantId = 'db17403f-3ed0-46c8-8e97-120639b5a2ea';
   const body = {
